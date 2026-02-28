@@ -1,2 +1,4 @@
 server_test
 test_echo_client
+tftp_server
+tftp_client
