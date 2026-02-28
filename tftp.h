@@ -7,7 +7,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 
@@ -53,23 +52,23 @@ typedef int bool;
 
 typedef struct {
     unsigned short optcode;
-    char FileName[MAX_STRING_SIZE+1] = "tesgdfghds";
-    char Mode[MAX_MODE_SIZE+1] = "octet";
+    char FileName[MAX_STRING_SIZE+1];
+    char Mode[MAX_MODE_SIZE+1];
 } RRQ, WRQ;
 
 typedef struct {
-    unsigned short optcode = 3;
+    unsigned short optcode;
     unsigned short No_Block;
     char data[MAX_DATA_SIZE];
 } DATA;
 
 typedef struct {
-    unsigned short optcode = 4;
+    unsigned short optcode;
     unsigned short No_Block;
 } ACK;
 
 typedef struct {
-    unsigned short optcode = 5;
+    unsigned short optcode;
     unsigned short ErrorCode;
     char ErrMsg[MAX_STRING_SIZE];
 } ERROR;

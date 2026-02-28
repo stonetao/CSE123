@@ -14,12 +14,8 @@ The provided sample code demonstrates UDP echo client/server communication and l
 CSE123/
 ├── tftp.h              # TFTP protocol definitions: packet structs, opcodes, error codes, constants
 ├── server_test.c       # UDP echo server (reference/sample code)
-├── test_echo_client.c  # UDP echo client (reference/sample code — sends an RRQ packet, prints reply)
-├── server_test         # Pre-compiled binary (macOS Mach-O x86_64 — does NOT run on Linux)
-└── test_echo_client    # Pre-compiled binary (macOS Mach-O x86_64 — does NOT run on Linux)
+└── test_echo_client.c  # UDP echo client (reference/sample code — sends an RRQ packet, prints reply)
 ```
-
-> **Note:** The committed binaries (`server_test`, `test_echo_client`) are **macOS Mach-O executables** and will not run on Linux. Recompile from source (see below).
 
 ---
 
@@ -58,7 +54,6 @@ Defines all TFTP protocol constants and packet structures:
 - `ACK` — optcode(4) + block number
 - `ERROR` — optcode(5) + error code + error message string
 
-> **Known issue in `tftp.h`:** The struct member initializers (`char FileName[...] = "..."`) are C++ syntax and are **not valid in C**. The file must be compiled as C++ (`g++ -x c++`) or the initializers must be removed and set in code instead.
 
 ### `server_test.c` — UDP Echo Server
 
@@ -84,30 +79,18 @@ Note: The main client loop (`while (fgets(...))`) is **commented out** — the c
 
 ## Building
 
-There is **no Makefile**. Compile manually with `gcc`. Note the C++ struct initializer issue in `tftp.h` — if included, compile with `g++`:
+There is **no Makefile**. Compile manually with `gcc`:
 
 ```bash
-# Compile the echo server
-gcc -o server_test server_test.c
-
-# Compile the echo client (includes tftp.h indirectly via test_echo_client.c if applicable)
-gcc -o test_echo_client test_echo_client.c
-
-# If tftp.h's C++ initializers cause issues, use g++:
-g++ -o server_test server_test.c
-g++ -o test_echo_client test_echo_client.c
-```
-
-Recommended flags for development:
-```bash
-gcc -Wall -Wextra -g -o <output> <source>.c
+gcc -Wall -Wextra -g -o server_test server_test.c
+gcc -Wall -Wextra -g -o test_echo_client test_echo_client.c
 ```
 
 ---
 
 ## Running the Echo Test
 
-The server and client use **port 12345** (different from the `SERV_UDP_PORT 60010` in `tftp.h`).
+The server and client both use `SERV_UDP_PORT` from `tftp.h` (port **60010**).
 
 ```bash
 # Terminal 1: start the server (runs indefinitely)
@@ -161,11 +144,7 @@ Based on the provided header and stubs, the project requires implementing:
 
 ---
 
-## Known Issues and Gotchas
+## Remaining Gotchas
 
-1. **`tftp.h` C++ initializers** — `char FileName[...] = "..."` inside a `struct` is invalid C; compile as C++ or remove the initializers.
-2. **Port mismatch** — `server_test.c` / `test_echo_client.c` use port `12345`; `tftp.h` defines `SERV_UDP_PORT 60010`. Align these when building the actual TFTP server.
-3. **Pre-built binaries are macOS binaries** — `server_test` and `test_echo_client` are Mach-O executables and cannot run on Linux. Always recompile from source.
-4. **`recvfrom` with `clilen` type** — `clilen` is declared as `int` in `server_test.c` but `recvfrom` expects `socklen_t *`. This may cause warnings; use `socklen_t` in new code.
-5. **Duplicate includes** — `test_echo_client.c` includes `<arpa/inet.h>` and `<stdlib.h>` twice; harmless but worth cleaning up.
-6. **`bzero` is deprecated** — prefer `memset(ptr, 0, size)` in new code.
+- **K&R function declarations** — `server_test.c` and `test_echo_client.c` use pre-ANSI K&R style (`dg_echo(sockfd) int sockfd;`). New code should use ANSI C prototypes.
+- **Client loop commented out** — `test_echo_client.c`'s `while (fgets(...))` loop is commented out; the client sends exactly one packet and exits.

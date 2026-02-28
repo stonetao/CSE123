@@ -5,10 +5,7 @@
 #include        <sys/socket.h>
 #include        <netinet/in.h>
 #include        <arpa/inet.h>
-
-#define SERV_UDP_PORT   12345
-
-#define SERV_HOST_ADDR  "127.0.0.1"
+#include        "tftp.h"
 
 char *progname;
 
@@ -32,7 +29,8 @@ int            sockfd;
 	
 /* Temporary variables, counters and buffers.                      */
 
-	int    n, clilen;
+	int    n;
+	socklen_t clilen;
 	char   mesg[MAXMESG];
 
 /* Main echo server loop. Note that it never terminates, as there  */
@@ -124,7 +122,7 @@ char    *argv[];
 
 /* The bzero function initializes the whole structure to zeroes.   */
 	
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+	memset(&serv_addr, 0, sizeof(serv_addr));
 	
 /* As sockaddr is a general purpose structure, we must declare     */
 /* what type of address it holds.                                  */

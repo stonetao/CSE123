@@ -8,21 +8,10 @@
 #include        <sys/types.h>
 #include        <sys/socket.h>
 #include        <netinet/in.h>
-#include        <arpa/inet.h>
-#include <stdlib.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include        <unistd.h>
+#include        "tftp.h"
 
 
-
-
-
-
-#define SERV_UDP_PORT 12345
-#define SERV_HOST_ADDR "127.0.0.1"
-//static int SERV_UDP_PORT=12345;
 
 /* A pointer to the name of this program for error reporting.      */
 
@@ -31,13 +20,6 @@ char *progname;
 /* Size of maximum message to send.                                */
 
 #define MAXLINE 512
-#define MAX_STRING_SIZE 256
-#define MAX_MODE_SIZE 8
-typedef struct {
-     unsigned short optcode;
-     char FileName[MAX_STRING_SIZE];
-     char Mode[MAX_MODE_SIZE];
-} RRQ;
 
 /* The dg_cli function reads lines from the terminal, sends them   */
 /* to the echo server pointed to by pserv_addr, and prints to the  */
@@ -143,7 +125,7 @@ char    *argv[];
 
 /* Initialize first the server's data with the well-known numbers. */
 
-	bzero((char *) &serv_addr, sizeof(serv_addr));
+	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family      = AF_INET;
 	
 /* The system needs a 32 bit integer as an Internet address, so we */
@@ -163,7 +145,7 @@ char    *argv[];
 /* Initialize the structure holding the local address data to      */
 /* bind to the socket.                                             */
 
-	bzero((char *) &cli_addr, sizeof(cli_addr));
+	memset(&cli_addr, 0, sizeof(cli_addr));
 	cli_addr.sin_family      = AF_INET;
 	
 /* Let the system choose one of its addresses for you. You can     */
