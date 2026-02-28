@@ -12,6 +12,7 @@ The provided sample code demonstrates UDP echo client/server communication and l
 
 ```
 CSE123/
+├── Makefile            # Build rules for both binaries
 ├── tftp.h              # TFTP protocol definitions: packet structs, opcodes, error codes, constants
 ├── server_test.c       # UDP echo server (reference/sample code)
 └── test_echo_client.c  # UDP echo client (reference/sample code — sends an RRQ packet, prints reply)
@@ -78,11 +79,9 @@ Note: The main client loop (`while (fgets(...))`) is **commented out** — the c
 
 ## Building
 
-There is **no Makefile**. Compile manually with `gcc`:
-
 ```bash
-gcc -Wall -Wextra -g -o server_test server_test.c
-gcc -Wall -Wextra -g -o test_echo_client test_echo_client.c
+make          # build both binaries
+make clean    # remove compiled binaries
 ```
 
 ---
