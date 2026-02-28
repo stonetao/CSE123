@@ -54,12 +54,11 @@ Defines all TFTP protocol constants and packet structures:
 - `ACK` — optcode(4) + block number
 - `ERROR` — optcode(5) + error code + error message string
 
-
 ### `server_test.c` — UDP Echo Server
 
 A reference UDP echo server that:
 1. Creates a UDP socket (`AF_INET`, `SOCK_DGRAM`)
-2. Binds to `INADDR_ANY` on port `12345`
+2. Binds to `INADDR_ANY` on port `60010`
 3. Loops forever: receives a datagram and echoes it back to the sender
 
 Uses **K&R (pre-ANSI) C** function declaration style. The server never terminates.
@@ -69,7 +68,7 @@ Uses **K&R (pre-ANSI) C** function declaration style. The server never terminate
 A reference UDP echo client that:
 1. Creates a UDP socket and binds to any available port
 2. Constructs a hardcoded `RRQ` struct (`optcode=1`, filename `"dsgdfgdfgdfghf"`, mode `"octet"`)
-3. Sends the RRQ packet to the server at `127.0.0.1:12345`
+3. Sends the RRQ packet to the server at `127.0.0.1:60010`
 4. Receives the echoed reply and prints the decoded `optcode`, filename, and mode
 5. Closes the socket and exits
 
@@ -111,12 +110,12 @@ octet
 
 ## Code Style and Conventions
 
-- **Language:** C (targeting C89/K&R compatibility, though `tftp.h` uses C++ features)
+- **Language:** C (targeting C89/K&R compatibility)
 - **Function declarations:** K&R style used in sample files (`dg_echo(sockfd) int sockfd;`) — new code should use ANSI C prototypes
 - **Boolean:** A manual `typedef int bool` with `#define true 1` / `#define false 0` is defined in `tftp.h` (do not include `<stdbool.h>` separately when using this header)
 - **Network byte order:** Always use `htons()`/`htonl()` when setting port/address fields, and `ntohs()`/`ntohl()` when reading them
 - **Error handling:** Use `exit()` with distinct non-zero codes for each error condition (convention already in place)
-- **Buffer zeroing:** Use `bzero()` (as in existing code) or `memset(..., 0, ...)` — both are acceptable
+- **Buffer zeroing:** Use `memset(ptr, 0, size)` — `bzero()` is deprecated
 
 ---
 

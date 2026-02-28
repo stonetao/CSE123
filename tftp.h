@@ -74,5 +74,3 @@ typedef struct {
 } ERROR;
 
 #endif
-
-

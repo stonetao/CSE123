@@ -120,7 +120,7 @@ char    *argv[];
 /* address and a UDP port number, so that the client can send data */
 /* to it. To do this, we fisrt prepare a sockaddr structure.       */
 
-/* The bzero function initializes the whole structure to zeroes.   */
+/* The memset call initializes the whole structure to zeroes.      */
 	
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	

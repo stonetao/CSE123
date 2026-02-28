@@ -1,8 +1,4 @@
-
-//Sample program at client side for echo transmit-receive - CSE-123-UCSD-Fall-2012 
-
-
-
+//Sample program at client side for echo transmit-receive - CSE-123-UCSD-Fall-2012
 
 #include        <stdio.h>
 #include        <sys/types.h>
@@ -10,8 +6,6 @@
 #include        <netinet/in.h>
 #include        <unistd.h>
 #include        "tftp.h"
-
-
 
 /* A pointer to the name of this program for error reporting.      */
 
@@ -47,22 +41,22 @@ int servlen;
     strcpy(send_RRQ.FileName,"dsgdfgdfgdfghf");
     strcpy(send_RRQ.Mode,"octet");
     memcpy(buffer,&send_RRQ,sizeof(send_RRQ));
-/* Main client loop. Terminates on EOF. Get terminal input on the  */ 
-/* sendline buffer (up to MAXLINE bytes).                          */ 
+/* Main client loop. Terminates on EOF. Get terminal input on the  */
+/* sendline buffer (up to MAXLINE bytes).                          */
 
 //	while (fgets(sendline, MAXLINE, stdin) != NULL) {
-		
+
 /* Find the string's length to pass it as a parameter to the send  */
 /* calls (excluding the null in the end).                          */
-		
-	//	n = strlen(sendline); 
-	    n = sizeof(buffer);	
+
+	//	n = strlen(sendline);
+	    n = sizeof(buffer);
 /* Send data using the sockfd socket, to the server at pserv_addr. */
 /* We also pass the send buffer and its size (sendline and n), an  */
 /* unused flag byte (0) and the server's address size (servlen).   */
 /* The returned number is the number of bytes sent. If it is not n */
 /* either an error or an interrupt has occured.                    */
-		
+
 		if (sendto(sockfd, buffer, n, 0, pserv_addr, servlen) != n)
 			{
 			 printf("%s: sendto error on socket\n",progname);
@@ -80,11 +74,11 @@ int servlen;
 			 printf("%s: recvfrom error\n",progname);
 			 exit(4);
 			}
-	
+
 /* The exchanged data is not null terminated, as the string length */
 /* is explicitly sent. We need to null terminate the string before */
 /* using fputs to output it on the terminal.                       */
-		
+
 		recvline[n] = 0;
   memcpy(&recv_RRQ,recvline,sizeof(recv_RRQ));
 
@@ -108,7 +102,7 @@ char    *argv[];
 	int  sockfd;
 /* We need to set up two addresses, one for the client and one for */
 /* the server.                                                     */
-	
+
 	struct sockaddr_in      cli_addr, serv_addr;
 	progname = argv[0];
 /* we need to get the port number ,read/write and filename*/
@@ -117,7 +111,7 @@ char    *argv[];
    // }
    // else if((argc == 3 || argc == 5) && argv[argc-2][0]=='-' && argv[argc-2][1]=='r'){
         /* read file from server*/
-     //   if(argv[ar]) 
+     //   if(argv[ar])
    // }
    // else if((argc == 3 || argc == 5) && argv[argc-2][0]=='-' && argv[argc-2][1]=='w'){
         /* write file to server*/
@@ -127,7 +121,7 @@ char    *argv[];
 
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family      = AF_INET;
-	
+
 /* The system needs a 32 bit integer as an Internet address, so we */
 /* use inet_addr to convert the dotted decimal notation to it.     */
 
@@ -135,7 +129,7 @@ char    *argv[];
 	serv_addr.sin_port        = htons(SERV_UDP_PORT);
 
 /* Create the socket for the client side.                          */
-	
+
 	if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
 	       {
 		printf("%s: can't open datagram socket\n",progname);
@@ -147,19 +141,18 @@ char    *argv[];
 
 	memset(&cli_addr, 0, sizeof(cli_addr));
 	cli_addr.sin_family      = AF_INET;
-	
+
 /* Let the system choose one of its addresses for you. You can     */
 /* use a fixed address as for the server.                          */
-       
+
 	cli_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	
+
 /* The client can also choose any port for itself (it is not       */
 /* well-known). Using 0 here lets the system allocate any free     */
 /* port to our program.                                            */
 
-
 	cli_addr.sin_port        = htons(0);
-	
+
 /* The initialized address structure can be now associated with    */
 /* the socket we created. Note that we use a different parameter   */
 /* to exit() for each type of error, so that shell scripts calling */
@@ -184,26 +177,3 @@ char    *argv[];
 	close(sockfd);
 	exit(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
